@@ -1,16 +1,21 @@
 import * as React from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux/es/exports";
 import { CloseArrow, OpenArrow } from "../../assets/avg";
+import { getIsCollapsedSelector } from "../../store/selectors";
+import { mainSlice } from "../../store/slice";
 
 const Navbar = () => {
-  const [isCollapsed, setIsCollapsed] = React.useState(true);
+  const dispatch = useDispatch();
+  const isCollapsed = useSelector(getIsCollapsedSelector());
 
   return !isCollapsed ? (
     <>
-      <div className="flex flex-row h-full fixed z-50 bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+      <div className="flex flex-row h-full fixed z-50 bg-white duration-500 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
         <p>Hi</p>
         <div
-          onClick={() => setIsCollapsed(true)}
-          className="flex flex-col h-full justify-center hover:bg-gray-200 duration-300 px-2 cursor-pointer ml-4"
+          onClick={() => dispatch(mainSlice.actions.closeNavbar())}
+          className="flex flex-col h-full justify-center hover:bg-gray-200 duration-500 px-2 cursor-pointer ml-4"
         >
           <CloseArrow />
         </div>
@@ -18,8 +23,8 @@ const Navbar = () => {
     </>
   ) : (
     <div
-      className="flex flex-col h-full justify-center fixed hover:bg-gray-200 duration-300 px-2 cursor-pointer"
-      onClick={() => setIsCollapsed(false)}
+      className="flex flex-col h-full justify-center fixed hover:bg-gray-200 duration-500 px-2 cursor-pointer"
+      onClick={() => dispatch(mainSlice.actions.openNavbar())}
     >
       <OpenArrow />
     </div>
