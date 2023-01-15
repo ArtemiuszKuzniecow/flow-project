@@ -1,12 +1,20 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import { Handle, Position } from "reactflow";
 import { PlayIcon } from "../../assets/svg";
+import { mainSlice } from "../../store/slice";
 
 const handleStyle = { top: 90 };
 
 const FirstNode = () => {
+  const dispatch = useDispatch();
+  const handleChangeNodeInNavbar = () => {
+    dispatch(mainSlice.actions.openNavbar());
+    dispatch(mainSlice.actions.setFirstNode());
+    dispatch(mainSlice.actions.setIsClickedTrue());
+  };
   return (
-    <>
+    <div onClick={handleChangeNodeInNavbar}>
       <div className="border-2 border-gray-400 rounded-xl hover:border-blue-500 cursor-pointer active:border-green-500 w-[280px] h-[200px] p-4 bg-white flex flex-col ">
         <div className="flex flex-row gap-5">
           <PlayIcon /> <h1 className="text-xl">Starting step</h1>
@@ -19,7 +27,7 @@ const FirstNode = () => {
         </div>
       </div>
       <Handle position={Position.Right} type={"source"} style={handleStyle} />
-    </>
+    </div>
   );
 };
 

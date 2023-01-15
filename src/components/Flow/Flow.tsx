@@ -3,10 +3,11 @@ import {
   Connection,
   Edge,
   EdgeChange,
-  NodeChange,
   Node,
+  NodeChange,
 } from "@reactflow/core";
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ReactFlow, {
   addEdge,
   applyEdgeChanges,
@@ -14,6 +15,11 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import {
+  getAllEdgesSelector,
+  getAllNodesSelector,
+} from "../../store/selectors";
+import { mainSlice } from "../../store/slice";
 import FirstNode from "../Nodes/FirstNode";
 import NextNode from "../Nodes/NextNode";
 
@@ -25,49 +31,34 @@ type CustomNode = Node<NodeData>;
 
 const nodeTypes = { First: FirstNode, Next: NextNode };
 
-const initialNodes: Node[] = [
-  {
-    id: "1",
-    data: { value: 123 },
-    position: { x: 350, y: 350 },
-    type: "First",
-  },
-  {
-    id: "2",
-    data: { value: 123 },
-    position: { x: 750, y: 400 },
-    type: "Next",
-  },
-  {
-    id: "3",
-    data: { value: 123 },
-    position: { x: 1150, y: 450 },
-    type: "Next",
-  },
-];
-
-const initialEdges = [
-  { id: "1-2", source: "1", target: "2" },
-  { id: "2-3", source: "2", target: "3" },
-];
-
 const Flow = () => {
+  const dispatch = useDispatch();
+  const initialNodes = useSelector(getAllNodesSelector());
+  const initialEdges = useSelector(getAllEdgesSelector());
   const [nodes, setNodes] = React.useState(initialNodes);
   const [edges, setEdges] = React.useState(initialEdges);
 
+  React.useEffect(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+  }, [initialNodes, initialEdges]);
+
   const onNodesChange = React.useCallback(
-    (changes: NodeChange[]) =>
-      setNodes((nds) => applyNodeChanges(changes, nds)),
+    (changes: NodeChange[]) => {
+      setNodes((nds: Node<any>[]) => applyNodeChanges(changes, nds));
+    },
     [setNodes]
   );
   const onEdgesChange = React.useCallback(
-    (changes: EdgeChange[]) =>
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
+    (changes: EdgeChange[]) => {
+      setEdges((eds) => applyEdgeChanges(changes, eds));
+    },
     [setEdges]
   );
   const onConnect = React.useCallback(
-    (connection: Edge<any> | Connection) =>
-      setEdges((eds) => addEdge(connection, eds)),
+    (connection: Edge<any> | Connection) => {
+      setEdges((eds) => addEdge(connection, eds));
+    },
     [setEdges]
   );
 
