@@ -1,11 +1,10 @@
 import { Connection, Edge, EdgeChange, NodeChange } from "@reactflow/core";
 import * as React from "react";
 import ReactFlow, {
-  Background,
-  Controls,
+  addEdge,
   applyEdgeChanges,
   applyNodeChanges,
-  addEdge,
+  Controls,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -41,7 +40,7 @@ const Flow = () => {
     return setEdges((eds) => addEdge(params, eds));
   }, []);
   return (
-    <div style={{ height: 800 }} className="ml-10">
+    <div style={{ height: "100vh" }} className="ml-10 bg-[#f1f3f5] h-full">
       <ReactFlow
         nodes={nodes}
         onNodesChange={onNodesChange}
@@ -49,8 +48,7 @@ const Flow = () => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
       >
-        <Background />
-        <Controls />
+        <Controls position="bottom-right" />
       </ReactFlow>
     </div>
   );
