@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es/exports";
-import { CloseArrow, OpenArrow } from "../../assets/avg";
+import { CloseArrow, OpenArrow } from "../../assets/svg";
 import { getIsCollapsedSelector } from "../../store/selectors";
 import { mainSlice } from "../../store/slice";
+import FirstNode from "../Nodes/FirstNode";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -13,8 +14,9 @@ const Navbar = () => {
     <>
       <div className="flex flex-row h-full fixed z-50 bg-white duration-500 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] w-[400px]">
         <div className="w-full text-center">
-          Flow <br /> Telegram Welcome Message
+          Flow <br /> Telegram Welcome Message <br />
         </div>
+
         <div
           onClick={() => dispatch(mainSlice.actions.closeNavbar())}
           className="flex flex-col h-full justify-center hover:bg-gray-200 duration-500 px-2 cursor-pointer ml-4"
