@@ -1,44 +1,33 @@
-import { Connection, Edge, EdgeChange, NodeChange } from "@reactflow/core";
-import * as React from "react";
-import ReactFlow, {
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-  Controls,
-} from "reactflow";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { Node } from "@reactflow/core";
+import ReactFlow, { Controls } from "reactflow";
 import "reactflow/dist/style.css";
+import { shallow } from "zustand/shallow";
+import useStore, { RFState } from "../../store/store";
+import FirstNode from "../Nodes/FirstNode";
+import NextNode from "../Nodes/NextNode";
 
-const edges = [{ id: "1-2", source: "1", target: "2" }];
+type NodeData = {
+  value: number;
+};
 
-const initialNodes = [
-  {
-    id: "1",
-    data: { label: "Hello" },
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: "2",
-    data: { label: "World" },
-    position: { x: 100, y: 100 },
-  },
-];
+type CustomNode = Node<NodeData>;
 
-const initialEdges = [{ id: "1-2", source: "1", target: "2" }];
+const nodeTypes = { First: FirstNode, Next: NextNode };
+
+const selector = (state: RFState) => ({
+  nodes: state.nodes,
+  edges: state.edges,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+});
 
 const Flow = () => {
-  const [nodes, setNodes] = React.useState(initialNodes);
-  const [edges, setEdges] = React.useState(initialEdges);
+  const { nodes, edges, onNodesChange, onEdgesChange } = useStore(
+    selector,
+    shallow
+  );
 
-  const onNodesChange = React.useCallback((changes: NodeChange[]) => {
-    return setNodes((nds) => applyNodeChanges(changes, nds));
-  }, []);
-  const onEdgesChange = React.useCallback((changes: EdgeChange[]) => {
-    return setEdges((eds) => applyEdgeChanges(changes, eds));
-  }, []);
-
-  const onConnect = React.useCallback((params: Edge<any> | Connection) => {
-    return setEdges((eds) => addEdge(params, eds));
-  }, []);
   return (
     <div style={{ height: "100vh" }} className="ml-10 bg-[#f1f3f5] h-full">
       <ReactFlow
@@ -46,7 +35,7 @@ const Flow = () => {
         onNodesChange={onNodesChange}
         edges={edges}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
+        nodeTypes={nodeTypes}
       >
         <Controls position="bottom-right" />
       </ReactFlow>
